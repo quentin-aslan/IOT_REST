@@ -1,0 +1,11 @@
+{
+  "IOT_REST_PORT": 31830,
+  "IOT_REST_DATABASE_URI": "mongodb://127.0.0.1:27017/api",
+  "IOT_REST_CAM_IP": "",
+  "IOT_REST_API_IP": "",
+  "IOT_REST_SMTP_HOST": "",
+  "IOT_REST_SMTP_PORT": "",
+  "IOT_REST_SMTP_USER": "",
+  "IOT_REST_SMTP_PASSWORD": "",
+  "IOT_REST_SMTP_FROM": ""
+}
