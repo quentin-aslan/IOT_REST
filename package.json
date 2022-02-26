@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "DEBUG=IOT_REST* nodemon index.js",
+    "dev": "DEBUG=IOT_REST* node index.js",
     "prod": "node index.js",
     "debug": "DEBUG=* node index.js"
   },
