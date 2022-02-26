@@ -22,7 +22,7 @@ router.post("/dht22", async (req, res, next) => {
             name: "humidity",
             value: datas.humidity});
 
-        console.log("datas : "); console.log(datas);
+        debug("datas : "); debug(datas);
         res.sendStatus(200);
     } catch(e) {
         res.status(500).send(e);

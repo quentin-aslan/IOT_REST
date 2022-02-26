@@ -126,7 +126,7 @@ class DbManager {
     async insertSensor(datas) {
         const answerSensor = await this.getSensorByName(datas.name);
         if(answerSensor && answerSensor.length !== 0) {
-            console.log(`${datas.name} est déjà dans la base de données.`)
+            debug(`${datas.name} est déjà dans la base de données.`)
             return answerSensor[0].id;
         }
 
