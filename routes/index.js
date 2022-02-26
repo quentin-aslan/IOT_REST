@@ -8,14 +8,45 @@ router.post("/dht22", async (req, res, next) => {
     try {
         const datas = req.body;
 
-        const insertSensor = await dbManager.insertSensor({name: datas.name, location: datas.location});
-        debug(insertSensor);
+        const sensorId = await dbManager.insertSensor({
+            name: datas.name,
+            location: datas.location});
 
+        await dbManager.insertSensorValue({
+            sensorId,
+            name: "temperature",
+            value: datas.temperature});
+
+        await dbManager.insertSensorValue({
+            sensorId,
+            name: "humidity",
+            value: datas.humidity});
 
         console.log("datas : "); console.log(datas);
         res.sendStatus(200);
     } catch(e) {
-        res.status(200).send(e);
+        res.status(500).send(e);
+    }
+});
+
+router.get("/", async (req, res,next) => {
+   try {
+       const sensors = await dbManager.getAllSensors();
+       const sensorValues = await dbManager.getAllSensorValues();
+       res.status(200).json({sensors, sensorValues});
+   } catch(e) {
+       res.status(500).send(e);
+   }
+});
+
+// Plus simple de mettre en get si je veux effacer depuis le portable
+router.get("/delete_all", async (req, res, next) => {
+    try {
+        await dbManager.clearValues();
+        await dbManager.clearSensors();
+        res.sendStatus(200);
+    } catch(e) {
+        res.status(500).send(e);
     }
 });
 

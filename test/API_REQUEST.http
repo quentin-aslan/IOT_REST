@@ -1,0 +1,22 @@
+# QUELQUES REQUEST POUR DEBUG
+
+POST http://localhost:31830/dht22
+Content-Type: application/json
+
+{
+  "name": "DHT22",
+  "temperature": "37",
+  "humidity": "34",
+  "location": "SALON"
+}
+
+###
+GET http://localhost:31830/delete_all
+Accept: application/json
+
+###
+GET http://localhost:31830/
+Accept: application/json
+###
+
+

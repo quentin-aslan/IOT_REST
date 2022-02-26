@@ -1,4 +1,4 @@
-const dbManager = require('./modules/dbManager');
+const dbManager = require('../modules/dbManager');
 
 describe("Test IOT_REST", () => {
 
