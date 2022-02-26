@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "debug": "^4.3.1",
+    "jest": "^27.5.1",
     "nodemon": "^2.0.7"
   },
   "author": "Quentin Aslan quentin.aslan@outlook.com",

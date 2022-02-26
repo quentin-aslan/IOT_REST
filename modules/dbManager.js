@@ -36,12 +36,16 @@ class DbManager {
         });
     }
 
+    disconnect() {
+        this.db.close();
+    }
+
     /**
      * @returns {Promise<Array>}
      */
     getAllSensors () {
         return new Promise((resolve, reject) => {
-            this.db.run(`SELECT * FROM sensors`, (error, rows) => {
+            this.db.all(`SELECT * FROM sensors;`, (error, rows) => {
                 if(error) {
                     return reject(error);
                 }
@@ -57,7 +61,7 @@ class DbManager {
      */
     getSensorById(sensorId) {
         return new Promise((resolve, reject) => {
-            this.db.run(`SELECT * FROM sensors WHERE id = '${sensorId}'`, (error, rows) => {
+            this.db.all(`SELECT * FROM sensors WHERE id = '${sensorId}'`, (error, rows) => {
                 if(error) {
                     return reject(error);
                 }
@@ -73,7 +77,22 @@ class DbManager {
      */
     getSensorByName(name) {
         return new Promise((resolve, reject) => {
-            this.db.run(`SELECT * FROM sensors WHERE name = '${name}'`, (error, rows) => {
+            this.db.all(`SELECT * FROM sensors WHERE name = '${name}'`, (error, rows) => {
+                if(error) {
+                    return reject(error);
+                }
+
+                resolve(rows);
+            });
+        });
+    }
+
+    /**
+     * @returns {Promise<Array>}
+     */
+    getAllSensorValues () {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT * FROM sensorValues;`, (error, rows) => {
                 if(error) {
                     return reject(error);
                 }
@@ -89,7 +108,7 @@ class DbManager {
      */
     getSensorValuesBySensorId(sensorId) {
         return new Promise((resolve, reject) => {
-            this.db.run(`SELECT * FROM values WHERE sensorId = '${sensorId}'`, (error, rows) => {
+            this.db.all(`SELECT * FROM sensorValues WHERE sensorId = '${sensorId}'`, (error, rows) => {
                 if(error) {
                     return reject(error);
                 }
@@ -106,20 +125,20 @@ class DbManager {
      */
     async insertSensor(datas) {
         const answerSensor = await this.getSensorByName(datas.name);
-        if(answerSensor.length !== 0) {
-            debug(`${datas.name} est déjà dans la base de données.`)
-            return null;
+        if(answerSensor && answerSensor.length !== 0) {
+            console.log(`${datas.name} est déjà dans la base de données.`)
+            return answerSensor[0].id;
         }
 
         return new Promise((resolve, reject) => {
             if(datas.name && datas.location) {
-                const date = new Date();
-                this.db.run(`INSERT INTO sensors(name, location) VALUES(?, ?)`, [datas.name, datas.location], (error, rows) => {
+                this.db.run(`INSERT INTO sensors(name, location) VALUES(?, ?)`, [datas.name, datas.location], function (error) {
                     if(error) {
                         return reject(error);
                     }
 
-                    resolve(rows)
+                    // this.lastID => Renvoyé par SQLITE
+                    return resolve(this.lastID);
                 });
             } else {
                 reject("Il manque des valeurs");
@@ -136,16 +155,41 @@ class DbManager {
         return new Promise((resolve, reject) => {
             if(datas.sensorId && datas.name && datas.value) {
                 const date = new Date();
-                this.db.run(`INSERT INTO values(sensorId, name, value, date) VALUES(?, ?, ?, ?)`, [datas.sensorId, datas.name, datas.value, date], (error, rows) => {
+                this.db.run(`INSERT INTO sensorValues(sensorId, name, value, date) VALUES(?, ?, ?, ?)`, [datas.sensorId, datas.name, datas.value, date], (error) => {
                     if(error) {
                         return reject(error);
                     }
 
-                    resolve(rows)
+                    // this.lastID => Renvoyé par SQLITE
+                    return resolve(this.lastID);
                 });
             } else {
                 reject("Il manque des valeurs");
             }
+        });
+    }
+
+    clearSensors() {
+        return new Promise((resolve, reject) => {
+            this.db.run(`DELETE FROM sensors`, (error) => {
+                    if(error) {
+                        return reject(error);
+                    }
+
+                    resolve();
+                });
+        });
+    }
+
+    clearValues() {
+        return new Promise((resolve, reject) => {
+            this.db.run(`DELETE FROM sensorValues`, (error) => {
+                if(error) {
+                    return reject(error);
+                }
+
+                resolve();
+            });
         });
     }
 
