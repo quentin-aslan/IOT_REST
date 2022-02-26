@@ -23,6 +23,10 @@ app.use(express.static('public'));
 const apiRoutes = require('./routes/index');
 app.use('/', apiRoutes);
 
+// Connection a la base de données
+const dbManager = require('./modules/dbManager');
+dbManager.connect();
+
 app.listen(process.env.IOT_REST_PORT, () => {
     console.log(`Server listening on port ${process.env.IOT_REST_PORT}`);
 });

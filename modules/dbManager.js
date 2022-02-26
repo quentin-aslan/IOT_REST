@@ -87,7 +87,7 @@ class DbManager {
      * @param {string} sensorId
      * @returns {Promise<Array>}
      */
-    getValuesBySensorId(sensorId) {
+    getSensorValuesBySensorId(sensorId) {
         return new Promise((resolve, reject) => {
             this.db.run(`SELECT * FROM values WHERE sensorId = '${sensorId}'`, (error, rows) => {
                 if(error) {
@@ -99,6 +99,11 @@ class DbManager {
         });
     }
 
+    /**
+     * Ajoute un capteur dans la base de données
+     * @param {{name: string, location: string}} datas
+     * @returns {Promise<unknown>}
+     */
     async insertSensor(datas) {
         const answerSensor = await this.getSensorByName(datas.name);
         if(answerSensor.length !== 0) {
@@ -122,7 +127,12 @@ class DbManager {
         });
     }
 
-    insertValue(datas) {
+    /**
+     * Ajoute une valeur dans la base de données
+     * @param {{sensorId: string, name: string, value: string}} datas
+     * @returns {Promise<unknown>}
+     */
+    insertSensorValue(datas) {
         return new Promise((resolve, reject) => {
             if(datas.sensorId && datas.name && datas.value) {
                 const date = new Date();
@@ -148,16 +158,16 @@ class DbManager {
         return new Promise((resolve, reject) => {
             // Avec deux tables ... (Mais chiant a gérer)
             this.db.exec(`CREATE TABLE IF NOT EXISTS sensors (
-                            'id' INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                            'name' TEXT,
-                            'location' TEXT);
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            name TEXT,
+                            location TEXT);
                             
-                        CREATE TABLE IF NOT EXISTS values (
-                            'id' INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                            'sensorId' TEXT,
-                            'name' TEXT,
-                            'value' TEXT,
-                            'date' DATETIME)`,
+                        CREATE TABLE IF NOT EXISTS sensorValues (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            sensorId TEXT,
+                            name TEXT,
+                            value TEXT,
+                            date DATETIME);`,
 
                         (err) => {
                             if(err) {
