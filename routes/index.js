@@ -34,6 +34,7 @@ router.post("/dht22", async (req, res, next) => {
         console.log("datas : "); console.log(datas);
         res.sendStatus(200);
     } catch(e) {
+        console.log(e);
         res.status(500).send(e);
     }
 });
