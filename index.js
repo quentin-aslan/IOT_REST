@@ -14,9 +14,9 @@ app.use(bodyParser.json({ limit: '50mb'}));
 
 // Récupération des variables de configuration
 const fs = require('fs');
-debug("Retrieving variables from the configuration file ...");
+console.log("Retrieving variables from the configuration file ...");
 const confFilePath = path.resolve(__dirname+'/configurationFile.json');
-debug(confFilePath);
+console.log(confFilePath);
 const confFile = JSON.parse(fs.readFileSync(confFilePath).toString());
 for(const args in confFile) process.env[args] = confFile[args];
 
@@ -31,5 +31,5 @@ const dbManager = require('./modules/dbManager');
 dbManager.connect();
 
 app.listen(process.env.IOT_REST_PORT, () => {
-    debug(`Server listening on port ${process.env.IOT_REST_PORT}`);
+    console.log(`Server listening on port ${process.env.IOT_REST_PORT}`);
 });

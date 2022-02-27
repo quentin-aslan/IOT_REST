@@ -9,7 +9,7 @@ router.post("/dht22", async (req, res, next) => {
         const datas = req.body;
 
         const sensorId = await dbManager.insertSensor({
-            name: datas.name,
+            name: "DHT22",
             location: datas.location});
 
         await dbManager.insertSensorValue({
@@ -27,7 +27,7 @@ router.post("/dht22", async (req, res, next) => {
             name: "realFeel",
             value: datas.realFeel});
 
-        debug("datas : "); debug(datas);
+        console.log("datas : "); console.log(datas);
         res.sendStatus(200);
     } catch(e) {
         res.status(500).send(e);
