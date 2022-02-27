@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const debug = require('debug')('IOT_REST:app');
+const path = require('path');
 
 // Ajax enable
 const cors = require('cors');
@@ -14,7 +15,9 @@ app.use(bodyParser.json({ limit: '50mb'}));
 // Récupération des variables de configuration
 const fs = require('fs');
 debug("Retrieving variables from the configuration file ...");
-const confFile = JSON.parse(fs.readFileSync("./configurationFile.json").toString());
+const confFilePath = path.resolve(__dirname+'/configurationFile.json');
+debug(confFilePath);
+const confFile = JSON.parse(fs.readFileSync(confFilePath).toString());
 for(const args in confFile) process.env[args] = confFile[args];
 
 // On établie que les fichiers static accessible sont dans le dossier public.
