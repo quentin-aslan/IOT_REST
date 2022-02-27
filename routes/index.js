@@ -8,9 +8,9 @@ router.post("/dht22", async (req, res, next) => {
     try {
         const datas = req.body;
 
-        const humidity = datas.humidity.toFixed(2);
-        const temperature = datas.temperature.toFixed(2);
-        const realFeel = datas.realFeel.toFixed(2);
+        const humidity = parseInt(datas.humidity, 10).toFixed(2);
+        const temperature = parseInt(datas.temperature, 10).toFixed(2);
+        const realFeel = parseInt(datas.realFeel, 10).toFixed(2);
 
         const sensorId = await dbManager.insertSensor({
             name: "DHT22",
