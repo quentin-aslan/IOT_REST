@@ -1,5 +1,7 @@
 const debug = require('debug')('IOT_REST:sqlite');
-const sqlite3 = require('sqlite3').verbose()
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
+const dbFolderPath = path.resolve("/opt")
 
 class DbManager {
     static getSingleton () {
@@ -23,7 +25,8 @@ class DbManager {
     connect(sqliteName = "IOT_REST.db") {
         const self = this;
         return new Promise((resolve, reject) => {
-            this.db = new sqlite3.Database(sqliteName, async(error) => {
+            const dbPath = path.resolve(dbFolderPath+"/"+sqliteName);
+            this.db = new sqlite3.Database(dbPath, async(error) => {
                 if(error) {
                     debug("Echec de la connection SQLITE 3.");
                     return reject(error);
