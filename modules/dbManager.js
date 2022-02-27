@@ -157,7 +157,7 @@ class DbManager {
     insertSensorValue(datas) {
         return new Promise((resolve, reject) => {
             if(datas.sensorId && datas.name && datas.value) {
-                const date = new Date().toLocaleString("en-US", {timeZone: "Europe/Paris"})
+                const date = new Date.now();
                 new Date().toLocaleTimeString()
                 this.db.run(`INSERT INTO sensorValues(sensorId, name, value, date) VALUES(?, ?, ?, ?)`, [datas.sensorId, datas.name, datas.value, date], (error) => {
                     if(error) {
