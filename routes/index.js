@@ -8,6 +8,10 @@ router.post("/dht22", async (req, res, next) => {
     try {
         const datas = req.body;
 
+        const humidity = datas.humidity.toFixed(2);
+        const temperature = datas.temperature.toFixed(2);
+        const realFeel = datas.realFeel.toFixed(2);
+
         const sensorId = await dbManager.insertSensor({
             name: "DHT22",
             location: datas.location});
@@ -15,17 +19,17 @@ router.post("/dht22", async (req, res, next) => {
         await dbManager.insertSensorValue({
             sensorId,
             name: "temperature",
-            value: datas.temperature});
+            value: temperature});
 
         await dbManager.insertSensorValue({
             sensorId,
             name: "humidity",
-            value: datas.humidity});
+            value: humidity});
 
         await dbManager.insertSensorValue({
             sensorId,
             name: "realFeel",
-            value: datas.realFeel});
+            value: realFeel});
 
         console.log("datas : "); console.log(datas);
         res.sendStatus(200);
