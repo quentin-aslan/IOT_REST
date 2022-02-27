@@ -22,6 +22,11 @@ router.post("/dht22", async (req, res, next) => {
             name: "humidity",
             value: datas.humidity});
 
+        await dbManager.insertSensorValue({
+            sensorId,
+            name: "realFeel",
+            value: datas.realFeel});
+
         debug("datas : "); debug(datas);
         res.sendStatus(200);
     } catch(e) {
